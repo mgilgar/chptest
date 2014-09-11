@@ -3,16 +3,17 @@ package fragment.submissions;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MiguelGil {
-		
+
 	public class VariationOf2 {
+
 		private int i1;
-		
 		private int i2;
-		
-		public VariationOf2(int i1, int i2) {
+
+		public VariationOf2(final int i1, final int i2) {
 			this.i1 = i1;
 			this.i2 = i2;
 		}
@@ -34,57 +35,70 @@ public class MiguelGil {
 		}
 
 	}
-	
-	
+
 	public String reassemble(final String fragmentProblem) {
-		String[] initialTokens = fragmentProblem.split(";");
-		List<String> tokens = new ArrayList<String>();
-		for (String initialToken: initialTokens) {
-			tokens.add(initialToken);
-		}
+		List<String> fragments = new ArrayList<String>(Arrays.asList(fragmentProblem.split(";")));
 		
-		while (tokens.size() > 1) {		
-			List<VariationOf2> variationsOf2 = getAllVariationsOf2(tokens.size());
-			List<Integer> lengthOfCommonCharacters = new ArrayList<Integer>();
+		while (fragments.size() > 1) {
+			List<VariationOf2> variationsOf2 = getAllVariationsOf2(fragments
+					.size());
+			//List<Integer> lengthOfCommonCharacters = new ArrayList<Integer>();
 			int max = 0;
 			int maxPosition = 0;
 			int currentPosition = 0;
-			for (VariationOf2 variation: variationsOf2) {
-				Integer lengthOfVariationOf2 = this.countOverlapingChars(tokens.get(variation.getI1()), tokens.get(variation.getI2()));
-				lengthOfCommonCharacters.add(lengthOfVariationOf2);
-				if (lengthOfVariationOf2>max) {
+			for (VariationOf2 variation : variationsOf2) {
+				Integer lengthOfVariationOf2 = this.countOverlapingChars(
+						fragments.get(variation.getI1()),
+						fragments.get(variation.getI2()));
+				//lengthOfCommonCharacters.add(lengthOfVariationOf2);
+				if (lengthOfVariationOf2 > max) {
 					max = lengthOfVariationOf2;
 					maxPosition = currentPosition;
 				}
 				currentPosition++;
 			}
-			String cancatenatedString = this.overlapConcat(tokens.get(variationsOf2.get(maxPosition).getI1()), tokens.get(variationsOf2.get(maxPosition).getI2()));
-			
-			if (variationsOf2.get(maxPosition).getI1() > variationsOf2.get(maxPosition).getI2()) {
-				tokens.remove(variationsOf2.get(maxPosition).getI1());
-				tokens.remove(variationsOf2.get(maxPosition).getI2());	
+			String cancatenatedString = this.overlapConcat(
+					fragments.get(variationsOf2.get(maxPosition).getI1()),
+					fragments.get(variationsOf2.get(maxPosition).getI2()));
+
+			if (variationsOf2.get(maxPosition).getI1() > variationsOf2.get(
+					maxPosition).getI2()) {
+				fragments.remove(variationsOf2.get(maxPosition).getI1());
+				fragments.remove(variationsOf2.get(maxPosition).getI2());
 			} else {
-				tokens.remove(variationsOf2.get(maxPosition).getI2());
-				tokens.remove(variationsOf2.get(maxPosition).getI1());	
+				fragments.remove(variationsOf2.get(maxPosition).getI2());
+				fragments.remove(variationsOf2.get(maxPosition).getI1());
 			}
-			
-			tokens.add(cancatenatedString);
+
+			fragments.add(cancatenatedString);
 		}
-		return tokens.get(0);
+		return fragments.get(0);
 	}
 
+	/**
+	 * Returns all variations of 2 elements from a set of n numbers from 0 to
+	 * n-1.
+	 * 
+	 * @param n
+	 *            number of numbers from 0 to n-1 that we want the variations of
+	 *            2 for.
+	 * @return <code>List<VariationOf2></code> containing the variations of 2
+	 *         numbers from 0 to n-1.
+	 * 
+	 **/
 	public List<VariationOf2> getAllVariationsOf2(int n) {
 		List<VariationOf2> variationsOf2 = new ArrayList<VariationOf2>();
-		for (int i=0; i < n; i++) {
-			for (int j=0; j < n; j++) {
-				if (i==j) continue;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (i == j)
+					continue;
 				variationsOf2.add(new VariationOf2(i, j));
 			}
 		}
 		return variationsOf2;
 	}
-		
-	public  String overlapConcat(String s1, String s2) {
+
+	public String overlapConcat(String s1, String s2) {
 		// Handle nulls... never return a null
 		if (s1 == null || s1.isEmpty()) {
 			if (s2 == null || s2.isEmpty())
@@ -97,7 +111,7 @@ public class MiguelGil {
 		if (s1.contains(s2)) {
 			return s1;
 		}
-		
+
 		// Checks above guarantee both strings have at least one character
 		int len1 = s1.length() - 1;
 		char last1 = s1.charAt(len1);
@@ -138,14 +152,15 @@ public class MiguelGil {
 		}
 		if (s2 == null || s2.isEmpty())
 			return 0;
-		if (s1.contains(s2)) return s2.length();
+		if (s1.contains(s2))
+			return s2.length();
 
 		// Checks above guarantee both strings have at least one character
 		int len1 = s1.length() - 1;
 		char last1 = s1.charAt(len1);
 		char first2 = s2.charAt(0);
 
-		// Find the first potential match, bounded by the length of s1		
+		// Find the first potential match, bounded by the length of s1
 		int indexOfLast2 = s2.lastIndexOf(last1,
 				Math.min(len1, s2.length() - 1));
 		while (indexOfLast2 != -1) {
@@ -176,7 +191,7 @@ public class MiguelGil {
 		try (BufferedReader in = new BufferedReader(new FileReader(args[0]))) {
 			String fragmentProblem;
 			while ((fragmentProblem = in.readLine()) != null) {
-			    System.out.println(instance.reassemble(fragmentProblem));
+				System.out.println(instance.reassemble(fragmentProblem));
 				System.out.println("");
 
 			}
