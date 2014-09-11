@@ -20,6 +20,10 @@ public class MiguelGil {
 
 	private Reassembler reassembler;
 
+	MiguelGil() {
+		reassembler = new Reassembler();
+	}
+
 	/**
 	 * Represents a tuple of a String and an int. It holds the result
 	 *
@@ -89,6 +93,37 @@ public class MiguelGil {
 	 * same document.
 	 */
 	public class Reassembler {
+
+		/**
+		 * Reassembles a fragment problem based on the overlapping characters
+		 * among the different fragments.
+		 * 
+		 * @param fragmentProblem
+		 *            a semicolon separated list of fragments.
+		 * @return a String containing the reassembled text.
+		 */
+		public String reassemble(final String fragmentProblem) {
+			List<String> fragments = new ArrayList<String>(Arrays.asList(fragmentProblem.split(FRAGMENT_SEPARATOR)));
+			while (fragments.size() > 1) {
+				List<VariationOf2> variations = getAllVariationsOf2(fragments.size());
+				ConcatenationResult max = new ConcatenationResult(fragments.get(0) + fragments.get(1), 0);
+				int maxPosition = 0;
+				int currentPosition = 0;
+				for (VariationOf2 variation : variations) {
+					ConcatenationResult concatenationResult = this.concatWithOverlappingCharacters(
+							fragments.get(variation.getI1()), fragments.get(variation.getI2()));
+					if (concatenationResult.getNumberOfOverlappingChars() > max.getNumberOfOverlappingChars()) {
+						max = concatenationResult;
+						maxPosition = currentPosition;
+					}
+					currentPosition++;
+				}
+				safeRemove(fragments, variations.get(maxPosition).getI1(), variations.get(maxPosition).getI2());
+				fragments.add(max.getConcatenatedString());
+			}
+			return fragments.get(0);
+		}
+
 		/**
 		 * Returns a <code>ConcatenationResult</code> that is the result of
 		 * concatenation of two strings that may have some overlapping
@@ -166,37 +201,7 @@ public class MiguelGil {
 		}
 
 		/**
-		 * Reassembles a fragment problem based on the overlapping characters
-		 * among the different fragments.
-		 * 
-		 * @param fragmentProblem
-		 *            a semicolon separated list of fragments.
-		 * @return a String containing the reassembled text.
-		 */
-		protected String reassemble(final String fragmentProblem) {
-			List<String> fragments = new ArrayList<String>(Arrays.asList(fragmentProblem.split(FRAGMENT_SEPARATOR)));
-			while (fragments.size() > 1) {
-				List<VariationOf2> variations = getAllVariationsOf2(fragments.size());
-				ConcatenationResult max = new ConcatenationResult(fragments.get(0) + fragments.get(1), 0);
-				int maxPosition = 0;
-				int currentPosition = 0;
-				for (VariationOf2 variation : variations) {
-					ConcatenationResult concatenationResult = this.concatWithOverlappingCharacters(
-							fragments.get(variation.getI1()), fragments.get(variation.getI2()));
-					if (concatenationResult.getNumberOfOverlappingChars() > max.getNumberOfOverlappingChars()) {
-						max = concatenationResult;
-						maxPosition = currentPosition;
-					}
-					currentPosition++;
-				}
-				safeRemove(fragments, variations.get(maxPosition).getI1(), variations.get(maxPosition).getI2());
-				fragments.add(max.getConcatenatedString());
-			}
-			return fragments.get(0);
-		}
-
-		/**
-		 * Remove safely two elements from a List identified by their indeces.
+		 * Remove safely two elements from a List identified by their indexes.
 		 * 
 		 * @param fragments
 		 *            the List of Strings whose elements we are going to remove.
@@ -224,7 +229,6 @@ public class MiguelGil {
 
 	public static void main(String[] args) {
 		MiguelGil app = new MiguelGil();
-		app.reassembler = app.new Reassembler();
 		try (BufferedReader in = new BufferedReader(new FileReader(args[0]))) {
 			String fragmentProblem;
 			while ((fragmentProblem = in.readLine()) != null) {
