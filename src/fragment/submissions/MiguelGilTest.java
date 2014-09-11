@@ -31,21 +31,6 @@ public class  MiguelGilTest {
 	public static void setup() {
 		miguelGil = new MiguelGil();
 	}
-
-	@Test
-	public void factorialWith0ShouldReturn1() {
-		Assert.assertThat(miguelGil.factorial(0), equalTo(1));
-	}
-
-	@Test
-	public void factorialWith1ShouldReturn1() {
-		Assert.assertThat(miguelGil.factorial(1), equalTo(1));
-	}
-	
-	@Test
-	public void factorialWith4ShouldReturn24() {
-		Assert.assertThat(miguelGil.factorial(4), equalTo(24));
-	}
 	
 	@Test
 	public void numberOfVariationssOf2With5ShouldReturn() {
@@ -56,16 +41,6 @@ public class  MiguelGilTest {
 	public void overlapConcatWithEmptyFragmentShouldWork() {
 		Assert.assertThat(miguelGil.overlapConcat(S, S_EMPTY), equalTo(S));
 	}
-	
-/*	@Test
-	public void overlapConcatWithExtraLeftFragmentShouldWork() {
-		Assert.assertThat(miguelGil.overlapConcat(S, S_EXTRA_LEFT), equalTo(S_PLUS_S_EXTRA_LEFT));
-	}*/
-
-	/*@Test
-	public void overlapConcatWithLeftFragmentShouldWork() {
-		Assert.assertThat(miguelGil.overlapConcat(S, S_LEFT), equalTo(S_PLUS_S_LEFT));
-	}*/
 
 	@Test
 	public void overlapConcatWithMiddleFragmentShouldWork() {
@@ -94,37 +69,16 @@ public class  MiguelGilTest {
 	public void countOverlapingCharsWithEmptyShouldReturn0() {
 		Assert.assertThat(miguelGil.countOverlapingChars(S, S_EMPTY), equalTo(0));
 	}
-	
-	/*@Test
-	public void countOverlapingCharsWithExtraLeftFragmentShouldWork() {
-		Assert.assertThat(miguelGil.countOverlapingChars(S, S_EXTRA_LEFT), equalTo(6));
-	}*/
-
-	/*@Test
-	public void countOverlapingCharsWithLeftFragmentShouldWork() {
-		Assert.assertThat(miguelGil.countOverlapingChars(S, S_LEFT), equalTo(S_LEFT.length()));
-	}*/
 
 	@Test
 	public void countOverlapingCharsWithMiddleFragmentShouldWork() {
 		Assert.assertThat(miguelGil.countOverlapingChars(S, S_MIDDLE), equalTo(S_MIDDLE.length()));
 	}
-	
-	/*
-	@Test
-	public void countOverlapingCharsWithMiddleFragmentShouldWork2() {
-		Assert.assertThat(miguelGil.countOverlapingChars(S_MIDDLE, S), equalTo(S_MIDDLE.length()));
-	}*/
 
 	@Test
 	public void countOverlapingCharsWithRightFragmentShouldWork() {
 		Assert.assertThat(miguelGil.countOverlapingChars(S, S_RIGHT), equalTo(S_RIGHT.length()));
 	}
-	/*
-	@Test
-	public void countOverlapingCharsWithRightFragmentShouldWork2() {
-		Assert.assertThat(miguelGil.countOverlapingChars(S_RIGHT, S), equalTo(S_RIGHT.length()));
-	}*/
 
 	@Test
 	public void countOverlapingCharsWithExtraRightFragmentShouldWork() {
